@@ -134,7 +134,7 @@ function tick(){document.getElementById('dateTime').textContent=new Date().toLoc
     return oldContent(name);
   };
   // Add maximize/restore controls and make every window keyboard-focusable.
-  $('.window').forEach(w=>w.tabIndex=0);
+  document.querySelectorAll('.window').forEach(w=>w.tabIndex=0);
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape'){const q=$('#quick'),s=$('#start');if(q)q.style.display='none';if(s)s.style.display='none';}
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='space'){e.preventDefault();toggleStart();}
