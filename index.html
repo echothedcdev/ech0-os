@@ -43,7 +43,7 @@ function buildLaunchers(){
 }
 function toggleStart(){const e=$('start');e.style.display=e.style.display==='block'?'none':'block';$('appSearch').value='';renderTiles()}
 function renderTiles(filter=''){const host=$('appTiles');host.replaceChildren();apps.filter(n=>n.toLowerCase().includes(filter.toLowerCase())).forEach(n=>{const tile=document.createElement('div');tile.className='tile';tile.append(button(icons[n]+'\n'+n,()=>{openApp(n);$('start').style.display='none'},'plain'));host.append(tile)})}
-function quickSetup(){const host=$('quickTiles');host.replaceChildren();['Wi-Fi','Bluetooth','Focus','Privacy','Airplane mode'].forEach((n,i)=>{const tile=document.createElement('div');tile.className='tile';const b=button(['📶','ᛒ','🌙','🛡️','✈️'][i]+'\n'+n,()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));tile.style.background=on?'#7045a8':'';toast(n+(on?' enabled':' disabled'))});b.setAttribute('aria-pressed','false');tile.append(b);host.append(tile)});host.append(button('⚙ Settings',()=>openApp('Settings'))}
+function quickSetup(){const host=$('quickTiles');host.replaceChildren();['Wi-Fi','Bluetooth','Focus','Privacy','Airplane mode'].forEach((n,i)=>{const tile=document.createElement('div');tile.className='tile';const b=button(['📶','ᛒ','🌙','🛡️','✈️'][i]+'\n'+n,()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));tile.style.background=on?'#7045a8':'';toast(n+(on?' enabled':' disabled'))});b.setAttribute('aria-pressed','false');tile.append(b);host.append(tile)});host.append(button('⚙ Settings',()=>openApp('Settings')))}
 function openApp(name){
  let w=$(safeId(name));if(!w){w=document.createElement('section');w.className='window active';w.id=safeId(name);w.style.zIndex=++z;
  const bar=document.createElement('header');bar.className='winbar';const title=document.createElement('b');title.textContent=(icons[name]||'📦')+' '+name;const controls=document.createElement('div');controls.className='controls';controls.append(button('—',()=>w.classList.remove('active')),button('□',()=>w.classList.toggle('maximized')),button('×',()=>w.remove()));bar.append(title,controls);
@@ -79,7 +79,6 @@ function updateClock(){$('dateTime').textContent=new Date().toLocaleString()}
 $('quickBtn').addEventListener('click',()=>{$('quick').style.display=$('quick').style.display==='block'?'none':'block'});
 $('appSearch').addEventListener('input',e=>renderTiles(e.target.value));
 $('brightness').addEventListener('input',e=>$('desktop').style.filter='brightness('+e.target.value+'%)');
-$('dock').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.textContent==='◈')toggleStart()});
 $('windows').addEventListener('click',handleAction);
 $('windows').addEventListener('change',e=>{
  if(e.target.id==='accentColor')document.documentElement.style.setProperty('--accent',e.target.value);
