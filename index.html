@@ -2,146 +2,92 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#120d20"><title>ECH0 OS</title>
+<meta name="theme-color" content="#100b1b"><title>ECH0 OS</title>
 <style>
-:root{--accent:#b66cff;--glass:rgba(24,17,39,.88);--line:rgba(255,255,255,.13);font-family:Inter,Segoe UI,Arial,sans-serif}
-*{box-sizing:border-box}body{margin:0;color:#f7f1ff;overflow:hidden;background:#100b1b}
-#desktop{height:100vh;padding:18px;background:radial-gradient(circle at 18% 18%,#59317d 0,transparent 32%),radial-gradient(circle at 85% 80%,#30235d 0,transparent 35%),linear-gradient(135deg,#100b1b,#211333 55%,#080812);background-size:cover}
-#top{position:absolute;top:0;left:0;right:0;height:38px;background:#100b1bcc;backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--line);font-size:13px}
-#shortcuts{display:grid;grid-template-columns:repeat(1,78px);gap:14px;margin-top:35px;width:90px}.shortcut{border:0;background:transparent;color:white;padding:8px;border-radius:10px;cursor:pointer}.shortcut:hover{background:#ffffff1c}.shortcut span{display:block;font-size:27px;margin-bottom:5px}.shortcut small{font-size:12px}
-#dock{position:absolute;bottom:15px;left:50%;transform:translateX(-50%);display:flex;gap:7px;padding:9px 12px;background:#171021c9;border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(22px);box-shadow:0 12px 45px #0008}
-button{font:inherit;color:inherit;cursor:pointer}#dock button{width:45px;height:43px;border:0;border-radius:12px;background:#ffffff12;font-size:22px}#dock button:hover{background:#ffffff2b;transform:translateY(-4px)}
-.panel,.window,.menu{background:var(--glass);border:1px solid var(--line);box-shadow:0 18px 60px #0008;backdrop-filter:blur(24px);border-radius:15px}
-#quick{display:none;position:absolute;right:14px;top:48px;width:290px;padding:16px}#start{display:none;position:absolute;bottom:75px;left:50%;transform:translateX(-50%);width:340px;padding:15px}
-.tilegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.tile{padding:12px 5px;border:1px solid var(--line);border-radius:10px;background:#ffffff0d;text-align:center}.tile button{background:none;border:0;width:100%}
-.window{position:absolute;left:20%;top:14%;width:min(680px,75vw);height:min(490px,70vh);min-width:300px;min-height:220px;display:none;overflow:hidden}.window.active{display:flex;flex-direction:column}.winbar{height:42px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#ffffff0b;border-bottom:1px solid var(--line);cursor:move}.winbar button{border:0;background:#ffffff14;border-radius:7px;padding:4px 9px}.winbody{padding:16px;overflow:auto;flex:1}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.card{background:#ffffff0b;border:1px solid var(--line);padding:13px;border-radius:11px}.action{background:var(--accent);color:#170d24;border:0;border-radius:8px;padding:8px 12px;font-weight:700}.muted{color:#c6b9d5;font-size:13px}input,textarea,select{background:#100b19;color:white;border:1px solid var(--line);border-radius:8px;padding:9px;max-width:100%}textarea{width:100%;min-height:180px}label{display:block;margin:12px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}#toast{position:absolute;bottom:85px;right:18px;background:#211632;border:1px solid var(--line);padding:10px 15px;border-radius:10px;display:none}
+:root{--accent:#bd83ff;--bg:#100b1b;--panel:rgba(25,18,40,.96);--line:#ffffff24;color-scheme:dark;font-family:Inter,Segoe UI,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f1ff;overflow:hidden}button,input,textarea{font:inherit}button{color:inherit;cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#desktop{height:100dvh;padding:54px 18px 90px;background:radial-gradient(circle at 18% 18%,#59317d 0,transparent 34%),radial-gradient(circle at 85% 80%,#30235d 0,transparent 38%),linear-gradient(135deg,#100b1b,#211333 55%,#080812);background-size:cover}
+#top{position:fixed;z-index:1000;top:0;left:0;right:0;height:42px;background:#100b1bdd;backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--line);font-size:13px}
+#top button,.winbar button,.plain{border:1px solid var(--line);background:#ffffff12;border-radius:8px;padding:6px 9px}
+#shortcuts{display:grid;grid-template-columns:repeat(1,82px);gap:10px}.shortcut{border:0;background:transparent;color:white;padding:9px 5px;border-radius:10px}.shortcut:hover{background:#ffffff1c}.shortcut span{display:block;font-size:28px;margin-bottom:5px}.shortcut small{font-size:12px}
+#dock{position:fixed;z-index:1000;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;max-width:95vw;overflow-x:auto;padding:9px 12px;background:#171021e8;border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(22px);box-shadow:0 12px 45px #0008}
+#dock button{flex:0 0 44px;height:43px;border:0;border-radius:12px;background:#ffffff12;font-size:21px}#dock button:hover{background:#ffffff2b;transform:translateY(-3px)}
+.panel,.window{background:var(--panel);border:1px solid var(--line);box-shadow:0 18px 60px #0008;backdrop-filter:blur(24px);border-radius:15px}
+#quick,#start{display:none;position:fixed;z-index:1100;padding:15px}#quick{right:12px;top:50px;width:min(310px,calc(100vw - 24px))}#start{bottom:78px;left:50%;transform:translateX(-50%);width:min(370px,calc(100vw - 24px));max-height:70vh;overflow:auto}
+.tilegrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.tile{padding:12px 5px;border:1px solid var(--line);border-radius:10px;background:#ffffff0d;text-align:center}.tile button{background:none;border:0;width:100%;min-height:38px}.tile[aria-pressed=true]{background:#7045a8}
+.window{position:absolute;left:12%;top:12%;width:min(720px,80vw);height:min(530px,72vh);min-width:min(290px,92vw);min-height:230px;display:none;overflow:hidden}.window.active{display:flex;flex-direction:column}.window.maximized{left:8px!important;top:48px!important;width:calc(100vw - 16px)!important;height:calc(100dvh - 112px)!important}
+.winbar{height:43px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 11px;background:#ffffff0b;border-bottom:1px solid var(--line);cursor:move;user-select:none}.winbar .controls{display:flex;gap:5px}.winbar button{padding:4px 10px}.winbody{padding:16px;overflow:auto;flex:1}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}.card{background:#ffffff0b;border:1px solid var(--line);padding:13px;border-radius:11px;text-align:left}.card:hover{background:#ffffff1b}.action{background:var(--accent);color:#170d24;border:0;border-radius:8px;padding:9px 13px;font-weight:700}.muted{color:#c6b9d5;font-size:13px}input,textarea,select{background:#100b19;color:white;border:1px solid var(--line);border-radius:8px;padding:9px;max-width:100%}input[type=text],input:not([type]),textarea{width:100%}textarea{min-height:170px}label{display:block;margin:12px 0}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row input{flex:1;min-width:130px}#toast{position:fixed;z-index:2000;bottom:85px;right:18px;background:#211632;border:1px solid var(--line);padding:10px 15px;border-radius:10px;display:none;max-width:90vw}
+@media(max-width:600px){#dock{left:8px;right:8px;transform:none;justify-content:flex-start}.window{left:3vw;top:10vh;width:94vw;height:75vh}.winbody{padding:12px}}
 </style></head>
 <body><main id="desktop">
-<div id="top"><b>◈ ECH0 OS</b><span id="dateTime"></span><button id="quickBtn">⚙ Quick settings</button></div>
-<div id="shortcuts">
-<button class="shortcut" onclick="openApp('Files')"><span>📁</span><small>Files</small></button>
-<button class="shortcut" onclick="openApp('Browser')"><span>🌐</span><small>Browser</small></button>
-<button class="shortcut" onclick="openApp('Settings')"><span>⚙️</span><small>Settings</small></button>
-<button class="shortcut" onclick="openApp('Notes')"><span>📝</span><small>Notes</small></button>
-<button class="shortcut" onclick="openApp('Tiny Echo')"><span>🤖</span><small>Tiny Echo</small></button>
-</div>
-<section id="quick" class="panel"><h3>Quick settings</h3><div class="tilegrid">
-<div class="tile"><button onclick="toggleTile(this)">📶<br>Wi-Fi</button></div><div class="tile"><button onclick="toggleTile(this)">ᛒ<br>Bluetooth</button></div><div class="tile"><button onclick="toggleTile(this)">🌙<br>Focus</button></div><div class="tile"><button onclick="toggleTile(this)">🛡️<br>Privacy</button></div><div class="tile"><button onclick="toast('Airplane mode toggled')">✈️<br>Airplane</button></div><div class="tile"><button onclick="openApp('Settings')">⚙️<br>Settings</button></div></div><label>Brightness <input type="range" min="40" max="130" value="100" oninput="document.getElementById('desktop').style.filter='brightness('+this.value/100+')'"></label></section>
-<section id="start" class="panel"><div class="row"><b>ECH0 menu</b><input id="appSearch" placeholder="Search apps..." oninput="filterApps(this.value)"></div><div class="tilegrid" id="appTiles"></div><p class="muted">ECH0 OS • Your desktop, your rules.</p></section>
+<header id="top"><b>◈ ECH0 OS</b><span id="dateTime"></span><button id="quickBtn" type="button">⚙ Quick settings</button></header>
+<nav id="shortcuts" aria-label="Desktop apps"></nav>
+<section id="quick" class="panel"><h3>Quick settings</h3><div class="tilegrid" id="quickTiles"></div><label>Brightness <input id="brightness" type="range" min="60" max="120" value="100"></label></section>
+<section id="start" class="panel"><div class="row"><b>ECH0 menu</b><input id="appSearch" type="text" placeholder="Search apps…"></div><div class="tilegrid" id="appTiles"></div><p class="muted">ECH0 OS • Your desktop, your rules.</p></section>
 <div id="windows"></div>
-<div id="dock"><button title="Start" onclick="toggleStart()">◈</button><button onclick="openApp('Files')">📁</button><button onclick="openApp('Browser')">🌐</button><button onclick="openApp('Notes')">📝</button><button onclick="openApp('Music')">🎵</button><button onclick="openApp('Calendar')">📅</button><button onclick="openApp('Calculator')">🧮</button><button onclick="openApp('Tiny Echo')">🤖</button><button onclick="openApp('Settings')">⚙️</button></div><div id="toast"></div>
+<nav id="dock" aria-label="App dock"></nav><div id="toast" role="status" aria-live="polite"></div>
 </main>
 <script>
+(()=>{
+'use strict';
 const apps=['Files','Browser','Settings','Notes','Music','Calendar','Calculator','Tiny Echo','App Center','Terminal','About ECH0 OS'];
-const icons={'Files':'📁','Browser':'🌐','Settings':'⚙️','Notes':'📝','Music':'🎵','Calendar':'📅','Calculator':'🧮','Tiny Echo':'🤖','App Center':'🛍️','Terminal':'⌨️','About ECH0 OS':'◈'};
-const windows=document.getElementById('windows');let z=5;
-function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window._toast);window._toast=setTimeout(()=>e.style.display='none',2200)}
-function toggleStart(){let e=document.getElementById('start');e.style.display=e.style.display==='block'?'none':'block';renderTiles()}
-function renderTiles(filter=''){let e=document.getElementById('appTiles');e.innerHTML=apps.filter(a=>a.toLowerCase().includes(filter.toLowerCase())).map(a=>'<div class="tile"><button onclick="openApp('+JSON.stringify(a)+');toggleStart()">'+icons[a]+'<br>'+a+'</button></div>').join('')}
-function filterApps(v){renderTiles(v)}
-function toggleTile(b){b.style.background=b.style.background?'':'#7045a8';toast(b.innerText.split('\n').pop()+' toggled')}
-document.getElementById('quickBtn').onclick=()=>{let q=document.getElementById('quick');q.style.display=q.style.display==='block'?'none':'block'};
-function openApp(name){let id='win-'+name.replace(/[^a-z0-9]/gi,'');let old=document.getElementById(id);if(old){old.classList.add('active');old.style.zIndex=++z;return}
-let w=document.createElement('section');w.className='window active';w.id=id;w.style.zIndex=++z;w.innerHTML='<header class="winbar"><b>'+icons[name]+' '+name+'</b><div><button onclick="minimizeApp(\''+id+'\')">—</button> <button onclick="closeApp(\''+id+'\')">×</button></div></header><div class="winbody">'+appContent(name)+'</div>';windows.append(w);dragWindow(w);w.addEventListener('pointerdown',()=>w.style.zIndex=++z)}
-function closeApp(id){document.getElementById(id)?.remove()}function minimizeApp(id){document.getElementById(id)?.classList.remove('active')}
-function dragWindow(w){let bar=w.querySelector('.winbar'),down=false,dx=0,dy=0;bar.addEventListener('pointerdown',e=>{if(e.target.tagName==='BUTTON')return;down=true;dx=e.clientX-w.offsetLeft;dy=e.clientY-w.offsetTop;bar.setPointerCapture(e.pointerId)});bar.addEventListener('pointermove',e=>{if(down){w.style.left=Math.max(0,e.clientX-dx)+'px';w.style.top=Math.max(38,e.clientY-dy)+'px'}});bar.addEventListener('pointerup',()=>down=false)}
-function appContent(n){
-if(n==='Files')return '<p class="muted">This PC / Home</p><div class="cards">'+['📄 Documents','⬇️ Downloads','🖼️ Pictures','🎵 Music','🎬 Videos','⭐ Favorites'].map(x=>'<div class="card">'+x+'</div>').join('')+'</div><p class="muted">Demo file manager. It does not access your real device files.</p>';
-if(n==='Browser')return '<div class="row"><input id="url" style="flex:1" placeholder="Search or enter a website"><button class="action" onclick="goWeb()">Go</button></div><div class="cards"><div class="card">🔎 ECH0 Search</div><div class="card">⭐ Bookmarks</div><div class="card">🕶️ Private window</div></div><iframe id="webview" title="Browser preview" style="width:100%;height:220px;border:1px solid var(--line);border-radius:10px;margin-top:12px;background:white"></iframe><p class="muted">Some websites block embedded previews.</p>';
-if(n==='Settings')return '<h2>Personalize ECH0 OS</h2><h3>Appearance</h3><div class="row">'+[['Violet','#100b1b'],['Ocean','#071c35'],['Crimson','#300d19'],['Forest','#0b281e'],['Light','#d8d1e5']].map(([a,c])=>'<button class="tile" onclick="document.getElementById(\'desktop\').style.background=\''+c+'\'">'+a+'</button>').join('')+'</div><label>Accent <input type="color" value="#b66cff" oninput="document.documentElement.style.setProperty(\'--accent\',this.value)"></label><h3>Privacy & security</h3><label><input type="checkbox" checked> Ask before app permissions</label><label><input type="checkbox" checked> Private activity by default</label><label><input type="checkbox"> Share diagnostics (off by default)</label><h3>Tiny Echo</h3><p>Tiny Echo must ask before taking actions.</p><label><input type="checkbox" checked> Ask before opening apps</label><h3>Optional themes</h3><label><input type="checkbox" onchange="toast(this.checked?'Duck Theme enabled':'Duck Theme disabled')"> 🦆 Duck Theme</label><p class="muted">Ducks Everywhere stays off. Ducktopia remains isolated to its own PC.</p>';
-if(n==='Notes')return '<textarea id="notes" placeholder="Write something..."></textarea><div class="row"><button class="action" onclick="localStorage.setItem(\'ech0-notes\',document.getElementById(\'notes\').value);toast(\'Notes saved on this browser\')">Save note</button><button onclick="document.getElementById(\'notes\').value=localStorage.getItem(\'ech0-notes\')||\'\'">Load note</button></div>';
-if(n==='Music')return '<h3>Local music player</h3><input type="file" accept="audio/*" onchange="playLocal(this)"><audio id="audio" controls style="width:100%;margin-top:15px"></audio><p class="muted">Choose an audio file from your device. It stays in this browser session.</p>';
-if(n==='Calendar')return '<h2>'+new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</h2><p>Calendar preview</p>';
-if(n==='Calculator')return '<input id="calcInput" placeholder="Example: 12*(4+2)"><button class="action" onclick="calculate()">Calculate</button><h2 id="calcResult">Result</h2><p class="muted">Basic arithmetic only.</p>';
-if(n==='Tiny Echo')return '<h2>Hello! I am Tiny Echo 🤖</h2><p>I can suggest actions, but I always ask permission before doing anything.</p><button class="action" onclick="if(confirm(\'May I open Settings?\'))openApp(\'Settings\')">Ask Tiny Echo to open Settings</button>';
-if(n==='Terminal')return '<p>ECH0 Terminal • safe demo</p><input id="term" placeholder="Try: help, date, version"><button class="action" onclick="terminalRun()">Run</button><pre id="termOut"></pre>';
-if(n==='App Center')return '<h2>App Center</h2><div class="cards">'+apps.filter(a=>!['App Center','About ECH0 OS'].includes(a)).map(a=>'<button class="card" onclick="openApp('+JSON.stringify(a)+')">'+icons[a]+' '+a+'</button>').join('')+'</div>';
-return '<h2>Welcome to ECH0 OS</h2><p>A futuristic desktop concept by Ecion Co.</p><p class="muted">Browser-based prototype • Version 0.1</p><p>Privacy first. Your desktop, your rules.</p>';
+const icons={Files:'📁',Browser:'🌐',Settings:'⚙️',Notes:'📝',Music:'🎵',Calendar:'📅',Calculator:'🧮','Tiny Echo':'🤖','App Center':'🛍️',Terminal:'⌨️','About ECH0 OS':'◈'};
+const $=id=>document.getElementById(id), windows=$('windows');let z=10,toastTimer;
+const safeId=n=>'win-'+n.replace(/[^a-z0-9]/gi,'');
+function toast(msg){const el=$('toast');el.textContent=msg;el.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display='none',2400)}
+function button(label,action,cls='plain'){const b=document.createElement('button');b.type='button';b.className=cls;b.textContent=label;b.addEventListener('click',action);return b}
+function buildLaunchers(){
+ const shortcuts=$('shortcuts'),dock=$('dock');shortcuts.replaceChildren();dock.replaceChildren();
+ ['Files','Browser','Settings','Notes','Tiny Echo'].forEach(n=>{const b=button('',()=>openApp(n),'shortcut');b.innerHTML='<span>'+icons[n]+'</span><small>'+n+'</small>';shortcuts.append(b)});
+ dock.append(button('◈',toggleStart));['Files','Browser','Notes','Music','Calendar','Calculator','Tiny Echo','Settings'].forEach(n=>dock.append(button(icons[n],()=>openApp(n))));
 }
-function goWeb(){let v=document.getElementById('url').value.trim();if(!v)return;let u=/^https?:\/\//i.test(v)?v:'https://'+v;document.getElementById('webview').src=u}
-function playLocal(i){let f=i.files[0];if(f)document.getElementById('audio').src=URL.createObjectURL(f)}
-function calculate(){let s=document.getElementById('calcInput').value;if(!/^[0-9+*/().%\s-]+$/.test(s)){toast('Only basic arithmetic is allowed');return}try{document.getElementById('calcResult').textContent=Function('"use strict";return ('+s+')')()}catch{document.getElementById('calcResult').textContent='Invalid expression'}}
-function terminalRun(){let c=document.getElementById('term').value.trim(),out={help:'Commands: help, date, version, clear',date:new Date().toString(),version:'ECH0 OS 0.1'};document.getElementById('termOut').textContent=c==='clear'?'':(out[c]||'Unknown command')}
-function tick(){document.getElementById('dateTime').textContent=new Date().toLocaleString()}setInterval(tick,1000);tick();renderTiles();openApp('About ECH0 OS');
-</script>
-<script id="ech0-functionality-patch">
-/* ECH0 OS interaction patch */
-(function(){
-  const $ = (s,root=document)=>root.querySelector(s);
-  const $ = (s,root=document)=>Array.from(root.querySelectorAll(s));
-  const originalOpenApp = window.openApp;
-  window.renderTiles = function(filter=''){
-    const host=$('#appTiles'); if(!host)return;
-    host.replaceChildren();
-    apps.filter(a=>a.toLowerCase().includes(filter.toLowerCase())).forEach(name=>{
-      const tile=document.createElement('div'); tile.className='tile';
-      const b=document.createElement('button'); b.type='button';
-      b.textContent=(icons[name]||'📦')+'\n'+name;
-      b.addEventListener('click',()=>{window.openApp(name);$('#start').style.display='none'});
-      tile.append(b);host.append(tile);
-    });
-  };
-  window.filterApps = v=>window.renderTiles(v);
-  window.toggleTile = function(b){
-    const on=b.dataset.on!=='true'; b.dataset.on=String(on);
-    b.style.background=on?'#7045a8':'';
-    b.setAttribute('aria-pressed',String(on));
-    toast((b.innerText.split('\n').pop()||'Setting')+(on?' enabled':' disabled'));
-  };
-  window.openApp = function(name){
-    const id='win-'+name.replace(/[^a-z0-9]/gi,'');
-    let w=document.getElementById(id);
-    if(!w){ originalOpenApp(name); w=document.getElementById(id); }
-    if(w){w.classList.add('active');w.style.zIndex=++z;}
-    return w;
-  };
-  window.goWeb = function(){
-    const w=$('#win-Browser'); if(!w)return;
-    const input=$('#url',w),frame=$('#webview',w); let value=input?.value.trim();
-    if(!value)return toast('Enter a website first');
-    if(!/^https?:\/\//i.test(value))value='https://'+value;
-    try{const u=new URL(value);if(!['http:','https:'].includes(u.protocol))throw 0;frame.src=u.href;}
-    catch{toast('That website address is not valid');}
-  };
-  window.calculate=function(){
-    const w=$('#win-Calculator'),input=$('#calcInput',w),result=$('#calcResult',w);
-    const s=input?.value.trim(); if(!s)return toast('Enter a calculation');
-    if(!/^[0-9+*/().%\s-]+$/.test(s))return result.textContent='Only basic arithmetic is allowed';
-    try{const n=Function('"use strict";return ('+s+')')();result.textContent=Number.isFinite(n)?String(n):'Invalid result';}
-    catch{result.textContent='Invalid expression';}
-  };
-  window.terminalRun=function(){
-    const w=$('#win-Terminal'),c=$('#term',w)?.value.trim(),out=$('#termOut',w);
-    const commands={help:'Commands: help, date, version, clear',date:new Date().toString(),version:'ECH0 OS 0.2'};
-    if(out)out.textContent=c==='clear'?'':(commands[c]||'Unknown command');
-  };
-  window.playLocal=function(input){
-    const w=input.closest('.window'),audio=$('#audio',w),file=input.files?.[0];
-    if(file&&audio){audio.src=URL.createObjectURL(file);audio.load();toast('Audio ready to play');}
-  };
-  // Replace App Center's fragile inline-handler buttons with safe real buttons.
-  const oldContent=window.appContent;
-  window.appContent=function(name){
-    if(name==='App Center'){
-      const host=document.createElement('div');host.innerHTML='<h2>App Center</h2><div class="cards"></div>';
-      const cards=$('.cards',host);
-      apps.filter(a=>!['App Center','About ECH0 OS'].includes(a)).forEach(a=>{
-        const b=document.createElement('button');b.className='card';b.type='button';
-        b.textContent=(icons[a]||'📦')+' '+a;b.addEventListener('click',()=>window.openApp(a));cards.append(b);
-      });
-      return host.innerHTML;
-    }
-    return oldContent(name);
-  };
-  // Add maximize/restore controls and make every window keyboard-focusable.
-  document.querySelectorAll('.window').forEach(w=>w.tabIndex=0);
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){const q=$('#quick'),s=$('#start');if(q)q.style.display='none';if(s)s.style.display='none';}
-    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='space'){e.preventDefault();toggleStart();}
-  });
-  // Ensure Start menu app buttons are rebuilt after search and on opening.
-  const start=$('#start'); if(start)start.addEventListener('click',e=>{if(e.target===start)e.stopPropagation();});
-  toast('ECH0 OS controls loaded');
+function toggleStart(){const e=$('start');e.style.display=e.style.display==='block'?'none':'block';$('appSearch').value='';renderTiles()}
+function renderTiles(filter=''){const host=$('appTiles');host.replaceChildren();apps.filter(n=>n.toLowerCase().includes(filter.toLowerCase())).forEach(n=>{const tile=document.createElement('div');tile.className='tile';tile.append(button(icons[n]+'\n'+n,()=>{openApp(n);$('start').style.display='none'},'plain'));host.append(tile)})}
+function quickSetup(){const host=$('quickTiles');host.replaceChildren();['Wi-Fi','Bluetooth','Focus','Privacy','Airplane mode'].forEach((n,i)=>{const tile=document.createElement('div');tile.className='tile';const b=button(['📶','ᛒ','🌙','🛡️','✈️'][i]+'\n'+n,()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));tile.style.background=on?'#7045a8':'';toast(n+(on?' enabled':' disabled'))});b.setAttribute('aria-pressed','false');tile.append(b);host.append(tile)});host.append(button('⚙ Settings',()=>openApp('Settings'))}
+function openApp(name){
+ let w=$(safeId(name));if(!w){w=document.createElement('section');w.className='window active';w.id=safeId(name);w.style.zIndex=++z;
+ const bar=document.createElement('header');bar.className='winbar';const title=document.createElement('b');title.textContent=(icons[name]||'📦')+' '+name;const controls=document.createElement('div');controls.className='controls';controls.append(button('—',()=>w.classList.remove('active')),button('□',()=>w.classList.toggle('maximized')),button('×',()=>w.remove()));bar.append(title,controls);
+ const body=document.createElement('div');body.className='winbody';body.innerHTML=appContent(name);w.append(bar,body);windows.append(w);makeDraggable(w,bar);
+ }else{w.classList.add('active');w.style.zIndex=++z}
+ w.focus();return w;
+}
+function makeDraggable(w,bar){let drag=null;bar.addEventListener('pointerdown',e=>{if(e.target.closest('button')||w.classList.contains('maximized'))return;drag={x:e.clientX-w.offsetLeft,y:e.clientY-w.offsetTop};bar.setPointerCapture(e.pointerId);w.style.zIndex=++z});bar.addEventListener('pointermove',e=>{if(!drag)return;w.style.left=Math.max(0,Math.min(innerWidth-w.offsetWidth,e.clientX-drag.x))+'px';w.style.top=Math.max(42,Math.min(innerHeight-90,e.clientY-drag.y))+'px'});bar.addEventListener('pointerup',()=>drag=null);bar.addEventListener('pointercancel',()=>drag=null);w.addEventListener('pointerdown',()=>w.style.zIndex=++z)}
+function appContent(n){
+ if(n==='Files')return '<h2>Home</h2><div class="cards">'+['📄 Documents','⬇️ Downloads','🖼️ Pictures','🎵 Music','🎬 Videos','⭐ Favorites'].map(x=>'<div class="card">'+x+'</div>').join('')+'</div><p class="muted">Demo file manager. It does not access your real device files.</p>';
+ if(n==='Browser')return '<div class="row"><input id="browserUrl" type="text" placeholder="Search or enter a website"><button class="action" data-action="go">Go</button></div><iframe id="webview" title="Browser preview" sandbox="allow-forms allow-scripts allow-same-origin" style="width:100%;height:300px;border:1px solid var(--line);border-radius:10px;margin-top:12px;background:white"></iframe><p class="muted">Some websites block embedded previews. Only http and https addresses are allowed.</p>';
+ if(n==='Settings')return '<h2>Personalize ECH0 OS</h2><h3>Wallpaper</h3><div class="row">'+[['Violet','#100b1b'],['Ocean','#071c35'],['Crimson','#300d19'],['Forest','#0b281e']].map(([a,c])=>'<button class="tile" data-wall="'+c+'">'+a+'</button>').join('')+'</div><label>Accent color <input id="accentColor" type="color" value="#bd83ff"></label><h3>Privacy</h3><label><input type="checkbox" checked> Ask before app permissions</label><label><input type="checkbox" checked> Private activity by default</label><label><input type="checkbox"> Share diagnostics (off by default)</label><h3>Tiny Echo</h3><p>Tiny Echo asks before performing actions.</p><label><input type="checkbox" checked> Ask before opening apps</label><h3>Optional themes</h3><label><input id="duckTheme" type="checkbox"> 🦆 Duck Theme</label><p class="muted">Ducks Everywhere stays off. Ducktopia remains isolated to its own PC.</p>';
+ if(n==='Notes')return '<textarea id="notes" placeholder="Write something…"></textarea><div class="row"><button class="action" data-action="saveNote">Save note</button><button class="plain" data-action="loadNote">Load note</button></div><p class="muted">Notes are stored only in this browser.</p>';
+ if(n==='Music')return '<h3>Local music player</h3><input id="audioFile" type="file" accept="audio/*"><audio id="audio" controls style="width:100%;margin-top:15px"></audio><p class="muted">Your selected audio file stays in this browser session.</p>';
+ if(n==='Calendar')return '<h2>'+new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</h2><p>Today</p>';
+ if(n==='Calculator')return '<input id="calcInput" type="text" placeholder="Example: 12*(4+2)"><button class="action" data-action="calculate">Calculate</button><h2 id="calcResult">Result appears here</h2><p class="muted">Basic arithmetic only.</p>';
+ if(n==='Tiny Echo')return '<h2>Hello! I am Tiny Echo 🤖</h2><p>I can help open apps, but I always ask permission first.</p><button class="action" data-action="tinySettings">Ask Tiny Echo to open Settings</button>';
+ if(n==='Terminal')return '<p>ECH0 Terminal • safe demo</p><input id="termInput" type="text" placeholder="Try: help, date, version, clear"><button class="action" data-action="terminal">Run</button><pre id="termOut"></pre><p class="muted">This is a demo terminal; it does not run system commands.</p>';
+ if(n==='App Center')return '<h2>App Center</h2><div class="cards">'+apps.filter(a=>!['App Center','About ECH0 OS'].includes(a)).map(a=>'<button class="card" data-launch="'+a+'">'+icons[a]+' '+a+'</button>').join('')+'</div>';
+ return '<h2>Welcome to ECH0 OS</h2><p>A futuristic desktop concept by Ecion Co.</p><p class="muted">Browser-based prototype • Version 0.2</p><p>Privacy first. Your desktop, your rules.</p>';
+}
+function handleAction(e){const b=e.target.closest('button');if(!b)return;const w=b.closest('.window');if(b.dataset.launch){openApp(b.dataset.launch);return}
+ switch(b.dataset.action){
+ case 'go':{const raw=$('browserUrl').value.trim();if(!raw)return toast('Enter a website first');let url=raw;if(!/^https?:\/\//i.test(url))url='https://'+url;try{const u=new URL(url);if(!['http:','https:'].includes(u.protocol))throw Error();$('webview').src=u.href}catch{toast('Invalid website address')}break}
+ case 'saveNote':localStorage.setItem('ech0-notes',$('notes').value);toast('Note saved on this browser');break;
+ case 'loadNote':$('notes').value=localStorage.getItem('ech0-notes')||'';toast('Note loaded');break;
+ case 'calculate':{const s=$('calcInput').value.trim();if(!s)return toast('Enter a calculation');if(!/^[0-9+*/().%\s-]+$/.test(s)){$('calcResult').textContent='Only basic arithmetic is allowed';break}try{const v=Function('"use strict";return ('+s+')')();$('calcResult').textContent=Number.isFinite(v)?String(v):'Invalid result'}catch{$('calcResult').textContent='Invalid expression'}break}
+ case 'tinySettings':if(confirm('Tiny Echo asks: May I open Settings?'))openApp('Settings');break;
+ case 'terminal':{const c=$('termInput').value.trim();const commands={help:'Commands: help, date, version, clear',date:new Date().toString(),version:'ECH0 OS 0.2'};$('termOut').textContent=c==='clear'?'':(commands[c]||'Unknown command');break}
+ }
+}
+function updateClock(){$('dateTime').textContent=new Date().toLocaleString()}
+$('quickBtn').addEventListener('click',()=>{$('quick').style.display=$('quick').style.display==='block'?'none':'block'});
+$('appSearch').addEventListener('input',e=>renderTiles(e.target.value));
+$('brightness').addEventListener('input',e=>$('desktop').style.filter='brightness('+e.target.value+'%)');
+$('dock').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.textContent==='◈')toggleStart()});
+$('windows').addEventListener('click',handleAction);
+$('windows').addEventListener('change',e=>{
+ if(e.target.id==='accentColor')document.documentElement.style.setProperty('--accent',e.target.value);
+ if(e.target.id==='duckTheme'){document.body.classList.toggle('duck-theme',e.target.checked);toast(e.target.checked?'Duck Theme enabled':'Duck Theme disabled')}
+ if(e.target.id==='audioFile'){const file=e.target.files?.[0],audio=$('audio');if(file&&audio){audio.src=URL.createObjectURL(file);audio.load();toast('Audio ready')}}
+});
+$('windows').addEventListener('click',e=>{const b=e.target.closest('[data-wall]');if(b)$('desktop').style.background=b.dataset.wall});
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.code==='Space'){e.preventDefault();toggleStart()}if(e.key==='Escape'){$('start').style.display='none';$('quick').style.display='none'}});
+buildLaunchers();quickSetup();renderTiles();updateClock();setInterval(updateClock,1000);openApp('About ECH0 OS');
 })();
-</script>
-\n</body></html>
+</script></body></html>
