@@ -38,8 +38,8 @@ function toast(msg){const el=$('toast');el.textContent=msg;el.style.display='blo
 function button(label,action,cls='plain'){const b=document.createElement('button');b.type='button';b.className=cls;b.textContent=label;b.addEventListener('click',action);return b}
 function buildLaunchers(){
  const shortcuts=$('shortcuts'),dock=$('dock');shortcuts.replaceChildren();dock.replaceChildren();
- ['Files','Browser','Settings','Notes','Tiny Echo'].forEach(n=>{const b=button('',()=>openApp(n),'shortcut');b.innerHTML='<span>'+icons[n]+'</span><small>'+n+'</small>';shortcuts.append(b)});
- dock.append(button('◈',toggleStart));['Files','Browser','Notes','Music','Calendar','Calculator','Tiny Echo','Settings'].forEach(n=>dock.append(button(icons[n],()=>openApp(n))));
+ ['Files','Browser','Settings','Tiny Echo'].forEach(n=>{const b=button('',()=>openApp(n),'shortcut');b.innerHTML='<span>'+icons[n]+'</span><small>'+(n==='Browser'?'Ecion Browser':n)+'</small>';shortcuts.append(b)});
+ dock.append(button('◈ Start',toggleStart));['Files','Browser','Tiny Echo','Settings'].forEach(n=>dock.append(button(icons[n],()=>openApp(n))));
 }
 function toggleStart(){const e=$('start');e.style.display=e.style.display==='block'?'none':'block';$('appSearch').value='';renderTiles()}
 function renderTiles(filter=''){const host=$('appTiles');host.replaceChildren();apps.filter(n=>n.toLowerCase().includes(filter.toLowerCase())).forEach(n=>{const tile=document.createElement('div');tile.className='tile';tile.append(button(icons[n]+'\n'+n,()=>{openApp(n);$('start').style.display='none'},'plain'));host.append(tile)})}
