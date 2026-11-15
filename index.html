@@ -68,7 +68,7 @@ function appContent(n){
 const browserState={history:[],index:-1,current:''};
 function normalizeAddress(raw){let value=raw.trim();if(!value)return '';if(/^https?:\\/\\//i.test(value))return value;if(/^localhost(:\\d+)?([/\\?#]|$)/i.test(value)||/^127\\.0\\.0\\.1(:\\d+)?([/\\?#]|$)/i.test(value))return 'http://'+value;if(value.includes(' ')||!value.includes('.'))return 'https://duckduckgo.com/?q='+encodeURIComponent(value);return 'https://'+value;}
 function navigateBrowser(raw,addHistory=true){const url=normalizeAddress(raw);if(!url)return toast('Enter a website or search');try{const parsed=new URL(url);if(!['http:','https:'].includes(parsed.protocol))throw Error();const frame=$('webview');if(!frame)return;browserState.current=parsed.href;if(addHistory){browserState.history=browserState.history.slice(0,browserState.index+1);browserState.history.push(parsed.href);browserState.index=browserState.history.length-1;}$('browserUrl').value=parsed.href;$('browserStatus').textContent='Loading '+parsed.hostname+'…';$('browserFallback').hidden=true;frame.hidden=false;frame.src=parsed.href;}catch{$('browserStatus').textContent='Invalid address';toast('Enter a valid http or https address');}}
-function openBrowserExternal(){if(!browserState.current)return toast('Enter a website first');const opened=window.open(browserState.current,'_blank','noopener,noreferrer');if(!opened)toast('Pop-up blocked. Allow pop-ups for this site, then try again.');}
+function openBrowserExternal(){if(!browserState.current)return toast('Enter a website first');window.open(browserState.current,'_blank','noopener,noreferrer');}
 function handleAction(e){const b=e.target.closest('button');if(!b)return;const w=b.closest('.window');if(b.dataset.launch){openApp(b.dataset.launch);return}
  switch(b.dataset.action){
  case 'back':if(browserState.index>0){browserState.index--;navigateBrowser(browserState.history[browserState.index],false)}else toast('No previous page');break;
@@ -87,7 +87,7 @@ function updateClock(){$('dateTime').textContent=new Date().toLocaleString()}
 $('quickBtn').addEventListener('click',()=>{$('quick').style.display=$('quick').style.display==='block'?'none':'block'});
 $('appSearch').addEventListener('input',e=>renderTiles(e.target.value));
 $('brightness').addEventListener('input',e=>$('desktop').style.filter='brightness('+e.target.value+'%)');
-$('windows').addEventListener('click',handleAction);\n$('windows').addEventListener('submit',e=>{if(e.target.id==='browserForm'){e.preventDefault();navigateBrowser($('browserUrl').value)}});\n$('windows').addEventListener('load',e=>{if(e.target.id==='webview')$('browserStatus').textContent='Page responded • If blank, the site may block embedded viewing. Try ↗';},true);
+$('windows').addEventListener('click',handleAction);\n$('windows').addEventListener('submit',e=>{if(e.target.id==='browserForm'){e.preventDefault();navigateBrowser($('browserUrl').value)}});\n$('windows').addEventListener('load',e=>{if(e.target.id==='webview')$('browserStatus').textContent='Navigation finished • If blank or blocked, use ↗ to open it normally';},true);
 $('windows').addEventListener('change',e=>{
  if(e.target.id==='accentColor')document.documentElement.style.setProperty('--accent',e.target.value);
  if(e.target.id==='duckTheme'){document.body.classList.toggle('duck-theme',e.target.checked);toast(e.target.checked?'Duck Theme enabled':'Duck Theme disabled')}
